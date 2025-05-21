@@ -3,7 +3,7 @@ use std::fmt::{Debug, Formatter};
 use solana_program::{
     clock::Clock, native_token::sol_to_lamports, pubkey::Pubkey, system_instruction::transfer,
 };
-use solana_program_test::{processor, BanksClientError, ProgramTest, ProgramTestContext};
+use solana_program_test::{BanksClientError, ProgramTest, ProgramTestContext};
 use solana_sdk::{
     commitment_config::CommitmentLevel,
     signature::{Keypair, Signer},

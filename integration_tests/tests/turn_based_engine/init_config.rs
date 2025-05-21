@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use solana_program::{instruction::InstructionError, pubkey::Pubkey};
+    use solana_program::{pubkey::Pubkey};
     use solana_sdk::{commitment_config::CommitmentLevel, instruction::{AccountMeta, Instruction}, rent::sysvar as sysvar_rent, signature::{Keypair, Signer}, system_program, transaction::Transaction};
 
     use crate::fixtures::{fixture::TestBuilder};

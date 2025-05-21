@@ -1,6 +1,6 @@
 use pinocchio::{account_info::AccountInfo, instruction::{Seed, Signer}, program_error::ProgramError, pubkey::Pubkey, sysvars::rent::Rent, ProgramResult};
 use pinocchio_system::instructions::CreateAccount;
-use crate::{accounts::config::Config, utils::{load_ix_data, load_signer, load_system_account, load_system_program, DataLen}};
+use crate::{accounts::config::Config, config_seed_with_bump,  utils::{load_ix_data, load_signer, load_system_account, load_system_program, DataLen}};
 use pinocchio_log::log;
 
 #[repr(C)]
@@ -35,9 +35,16 @@ pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], 
     // ----------------------- WORK -----------------------
 
     let rent = Rent::from_account_info(sysvar_rent)?;
-    let bump = [ix_data.config_bump];
-    let seed = [Seed::from(Config::SEED), Seed::from(base.key()), Seed::from(&bump)];
-    let seeds = Signer::from(&seed);
+
+    let bump_bytes = [ix_data.config_bump];
+    let seed_with_bump = config_seed_with_bump!(base.key(), &bump_bytes);
+    let signing_seeds = [
+        Seed::from(seed_with_bump[0]), 
+        Seed::from(seed_with_bump[1]), 
+        Seed::from(seed_with_bump[2])
+    ];
+    Config::check_seeds(base.key(), ix_data.config_bump, &signing_seeds)?;
+    let signer = Signer::from(&signing_seeds);
 
     CreateAccount {
         from: admin,
@@ -46,7 +53,7 @@ pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], 
         owner: &crate::ID,
         lamports: rent.minimum_balance(Config::LEN),
     }
-    .invoke_signed(&[seeds])?;
+    .invoke_signed(&[signer])?;
   
     unsafe {
         Config::initialize(config, ix_data.config_bump, &base.key(), &admin.key(), &server.key(), ix_data.game_fee_bps)?;

@@ -1,5 +1,5 @@
 
-use pinocchio::{account_info::AccountInfo, instruction::{Seed, Signer}, program_error::ProgramError, pubkey::{self, Pubkey}};
+use pinocchio::{account_info::AccountInfo, instruction::{Seed}, program_error::ProgramError, pubkey::{self, Pubkey}};
 use pinocchio_log::log;
 
 use crate::{utils::{load_account, load_account_mut_unchecked, DataLen, Initialized}, accounts::GameEngineDiscriminator};
@@ -26,20 +26,53 @@ impl Initialized for Config {
     }
 }
 
+
+#[macro_export]
+macro_rules! config_seed_with_bump {
+    ($base:expr, $bump_slice:expr) => {
+        [crate::accounts::config::Config::SEED, $base.as_ref(), $bump_slice]
+    };
+}
+
 impl Config {
     // ----------------------- ACCOUNT CHECKS ---------------------------
     pub const SEED: &[u8] = b"CONFIG";
 
-
-    pub fn create_program_address<'a>(
+    pub fn create_program_address(
         program_id: &Pubkey,
         base: &Pubkey,
         bump: u8,
     ) -> Result<Pubkey, ProgramError> {
-        let seed_with_bump = [Self::SEED, base.as_ref(), &[bump]];
+        let bump_bytes = [bump];
+        let seed_with_bump = config_seed_with_bump!(base, &bump_bytes);
         let pda = pubkey::create_program_address(&seed_with_bump, program_id)?;
 
         Ok(pda)
+    }
+
+    // Sanity check for the seeds
+    pub fn check_seeds(
+        base: &Pubkey,
+        bump: u8,
+        seeds: &[Seed],
+    ) -> Result<(), ProgramError> {
+        let bump_bytes = [bump];
+        let seed_with_bump = config_seed_with_bump!(base, &bump_bytes);
+
+        if seeds.len() != seed_with_bump.len() {
+            return Err(ProgramError::InvalidAccountData);
+        }
+
+        for (seed_index, seed) in seeds.iter().enumerate(){
+            for (byte_index, byte) in seed.as_ref().iter().enumerate() {
+                let seed_byte = seed_with_bump[seed_index][byte_index];
+                if byte.ne(&seed_byte) {
+                    return Err(ProgramError::InvalidAccountData);
+                }
+            }
+        }
+
+        Ok(())
     }
 
     pub fn load(
