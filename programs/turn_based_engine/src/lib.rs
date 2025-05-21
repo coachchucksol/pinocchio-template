@@ -11,7 +11,7 @@ pub mod instructions;
 pub mod errors;
 pub mod utils;
 
-use instructions::{initialize_config::process_initilaize_config, GameEngineInstructions};
+use instructions::{initialize_config::process_initilaize_config, update_config::process_update_config, GameEngineInstructions};
 
 pinocchio_pubkey::declare_id!("Dv8yNgZsBkebdLnet7eYNBRN6XbgLNxLKLRoaXZ12jUR");
 // This is the entrypoint for the program.
@@ -29,14 +29,16 @@ fn process_instruction(
     accounts: &[AccountInfo],
     instruction_data: &[u8],
 ) -> ProgramResult {
-    let (ix, instruction_data) = instruction_data
-        .split_first()
-        .ok_or(ProgramError::InvalidInstructionData)?;
+    let discriminator = GameEngineInstructions::try_from(&instruction_data[0])?;
 
-    match GameEngineInstructions::try_from(ix)? {
+    match discriminator {
         GameEngineInstructions::InitializeConfig => {
             log!("Initializing server config");
             process_initilaize_config(program_id, accounts, instruction_data)
+        }
+        GameEngineInstructions::UpdateConfig => {
+            log!("Updating server config");
+            process_update_config(program_id, accounts, instruction_data)
         }
     }
 }

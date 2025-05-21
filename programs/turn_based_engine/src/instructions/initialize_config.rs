@@ -3,11 +3,27 @@ use pinocchio_system::instructions::CreateAccount;
 use crate::{accounts::config::Config, config_seed_with_bump,  utils::{load_ix_data, load_signer, load_system_account, load_system_program, DataLen}};
 use pinocchio_log::log;
 
+use super::GameEngineInstructions;
+
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct InitializeConfigIxData {
+    pub discriminator: u8,
     pub config_bump: u8,
     pub game_fee_bps: u32,
+}
+
+impl InitializeConfigIxData {
+    pub fn new(
+        config_bump: u8,
+        game_fee_bps: u32,
+    ) -> Self {
+        Self { discriminator: GameEngineInstructions::InitializeConfig as u8, config_bump, game_fee_bps }
+    }
+
+    pub unsafe fn to_bytes(&self) -> &[u8] {
+        unsafe { crate::utils::to_bytes::<Self>(&self) }
+    }
 }
 
 impl DataLen for InitializeConfigIxData {
@@ -56,7 +72,7 @@ pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], 
     .invoke_signed(&[signer])?;
   
     unsafe {
-        Config::initialize(config, ix_data.config_bump, &base.key(), &admin.key(), &server.key(), ix_data.game_fee_bps)?;
+        Config::initialize(config, &base.key(), &admin.key(), &server.key(), &ix_data)?;
     }
 
     Ok(())

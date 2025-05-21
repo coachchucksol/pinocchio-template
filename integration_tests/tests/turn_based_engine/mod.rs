@@ -1,1 +1,1 @@
-mod init_config;
+mod tests;

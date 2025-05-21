@@ -7,8 +7,7 @@ use solana_sdk::{
 use turn_based_engine::{
     accounts::config::Config,
     instructions::{
-        initialize_config::InitializeConfigIxData,
-        GameEngineInstructions,
+        initialize_config::InitializeConfigIxData, update_config::UpdateConfigIxData, GameEngineInstructions
     },
 };
 
@@ -44,13 +43,10 @@ pub fn initialize_config_ix(
         AccountMeta::new_readonly(system_program, false),
     ];
 
-    let mut ix_data_bytes = vec![];
-    ix_data_bytes.push(GameEngineInstructions::InitializeConfig as u8);
-    let ix_data = InitializeConfigIxData {
-        config_bump,
-        game_fee_bps,
+    let ix_data = InitializeConfigIxData::new(config_bump, game_fee_bps);
+    let ix_data_bytes = unsafe {
+        ix_data.to_bytes()
     };
-    ix_data_bytes.extend(unsafe { turn_based_engine::utils::to_bytes(&ix_data) });
 
     Instruction {
         program_id,
@@ -59,3 +55,34 @@ pub fn initialize_config_ix(
     }
 }
 
+pub fn update_config_ix(
+    base: &Pubkey,
+    admin: &Pubkey,
+    new_admin: Option<Pubkey>,
+    new_server: Option<Pubkey>,
+    new_game_fee_bps: Option<u32>,
+) -> Instruction {
+    let program_id = turn_based_engine_program_id();
+
+    let (config, _) = config_address(base);
+
+    let accounts = vec![
+        AccountMeta::new(config, false),
+        AccountMeta::new(*admin, true),
+    ];
+
+    let ix_data = UpdateConfigIxData::new(
+        new_admin.map(|p| p.to_bytes()),
+        new_server.map(|p| p.to_bytes()),
+        new_game_fee_bps,
+    );
+    let ix_data_bytes = unsafe {
+        ix_data.to_bytes()
+    };
+
+    Instruction {
+        program_id,
+        accounts,
+        data: ix_data_bytes.to_vec(),
+    }
+}

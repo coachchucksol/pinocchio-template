@@ -2,7 +2,7 @@
 use pinocchio::{account_info::AccountInfo, instruction::{Seed}, program_error::ProgramError, pubkey::{self, Pubkey}};
 use pinocchio_log::log;
 
-use crate::{utils::{load_account, load_account_mut_unchecked, DataLen, Initialized}, accounts::GameEngineDiscriminator};
+use crate::{accounts::GameEngineDiscriminator, instructions::{initialize_config::InitializeConfigIxData, update_config::UpdateConfigIxData}, utils::{load_account, load_account_mut, load_account_mut_unchecked, load_signer, DataLen, Initialized}};
 
 /// The Counter account structure
 #[derive(Debug, Default, Copy, Clone)]
@@ -79,6 +79,7 @@ impl Config {
         program_id: &Pubkey,
         account_info: &AccountInfo,
         expect_writable: bool,
+        check_admin: Option<&AccountInfo>,
     ) -> Result<(), ProgramError> {
         let account_owner = unsafe { account_info.owner() };
         if account_owner.ne(program_id) {
@@ -108,16 +109,38 @@ impl Config {
             return Err(ProgramError::InvalidAccountData);
         }
 
+        if let Some(admin) = check_admin {
+            load_signer(admin, true)?;
+            if account.admin.ne(admin.key()) {
+                log!("Config account has an invalid admin");
+                return Err(ProgramError::InvalidAccountData);
+            }
+        }
+
+        Ok(())
+    }
+
+    pub unsafe fn check_admin(
+        account_info: &AccountInfo,
+        admin: &AccountInfo,
+    ) -> Result<(), ProgramError> {
+        let mut data = account_info.borrow_mut_data_unchecked();
+        let account = load_account_mut_unchecked::<Config>(&mut data)?;
+
+        if account.admin.ne(admin.key()) {
+            log!("Config account has an invalid admin");
+            return Err(ProgramError::InvalidAccountData);
+        }
+
         Ok(())
     }
     // ----------------------- INITIALIZE ------------------------  
     pub unsafe fn initialize(
         account_info: &AccountInfo,
-        bump: u8,
         base: &Pubkey,
         admin: &Pubkey,
         server: &Pubkey,
-        game_fee_bps: u32,
+        ix_data: &InitializeConfigIxData,
     ) -> Result<(), ProgramError> {
         let mut data = account_info.borrow_mut_data_unchecked();
         let account = load_account_mut_unchecked::<Config>(&mut data)?;
@@ -128,11 +151,34 @@ impl Config {
         }
 
         account.discriminator = GameEngineDiscriminator::Config as u8;
-        account.bump = bump;
+        account.bump = ix_data.config_bump;
         account.base = *base;
         account.admin = *admin;
         account.server = *server;
-        account.game_fee_bps = game_fee_bps;
+        account.game_fee_bps = ix_data.game_fee_bps;
+
+        Ok(())
+    }
+
+    // ----------------------- UPDATE ----------------------------
+    pub unsafe fn update(
+        account_info: &AccountInfo,
+        ix_data: &UpdateConfigIxData,
+    ) -> Result<(), ProgramError> {
+        let mut data = account_info.borrow_mut_data_unchecked();
+        let account = load_account_mut::<Config>(&mut data)?;
+ 
+        if let Some(new_admin) = ix_data.new_admin {
+            account.admin = new_admin;
+        }
+
+        if let Some(new_server) = ix_data.new_server {
+            account.server = new_server;
+        }
+
+        if let Some(new_game_fee_bps) = ix_data.new_game_fee_bps {
+            account.game_fee_bps = new_game_fee_bps;
+        }
 
         Ok(())
     }
