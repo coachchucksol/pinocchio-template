@@ -2914,6 +2914,67 @@ dependencies = [
 ]
 
 [[package]]
+name = "pinocchio-template-example-program"
+version = "0.1.0"
+dependencies = [
+ "pinocchio",
+ "pinocchio-log",
+ "pinocchio-pubkey",
+ "pinocchio-system",
+]
+
+[[package]]
+name = "pinocchio-template-sdk"
+version = "0.1.0"
+dependencies = [
+ "pinocchio",
+ "pinocchio-log",
+ "pinocchio-pubkey",
+ "pinocchio-system",
+ "pinocchio-template-example-program",
+ "solana-account-decoder",
+ "solana-cli-config",
+ "solana-metrics",
+ "solana-program",
+ "solana-program-test",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-sdk",
+ "solana-security-txt",
+ "spl-associated-token-account",
+ "spl-token 8.0.0",
+ "spl-token-2022 9.0.0",
+ "syn 2.0.101",
+ "test-case",
+ "thiserror 2.0.12",
+ "tokio",
+]
+
+[[package]]
+name = "pinocchio-template-tests"
+version = "0.1.0"
+dependencies = [
+ "pinocchio-template-example-program",
+ "pinocchio-template-sdk",
+ "solana-account-decoder",
+ "solana-cli-config",
+ "solana-metrics",
+ "solana-program",
+ "solana-program-test",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-sdk",
+ "solana-security-txt",
+ "spl-associated-token-account",
+ "spl-token 8.0.0",
+ "spl-token-2022 9.0.0",
+ "syn 2.0.101",
+ "test-case",
+ "thiserror 2.0.12",
+ "tokio",
+]
+
+[[package]]
 name = "pkg-config"
 version = "0.3.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6945,57 +7006,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "solarcade-xyz-sdk"
-version = "0.1.0"
-dependencies = [
- "pinocchio",
- "pinocchio-log",
- "pinocchio-pubkey",
- "pinocchio-system",
- "solana-account-decoder",
- "solana-cli-config",
- "solana-metrics",
- "solana-program",
- "solana-program-test",
- "solana-rpc-client",
- "solana-rpc-client-api",
- "solana-sdk",
- "solana-security-txt",
- "spl-associated-token-account",
- "spl-token 8.0.0",
- "spl-token-2022 9.0.0",
- "syn 2.0.101",
- "test-case",
- "thiserror 2.0.12",
- "tokio",
- "turn-based-engine",
-]
-
-[[package]]
-name = "solarcade-xyz-tests"
-version = "0.1.0"
-dependencies = [
- "solana-account-decoder",
- "solana-cli-config",
- "solana-metrics",
- "solana-program",
- "solana-program-test",
- "solana-rpc-client",
- "solana-rpc-client-api",
- "solana-sdk",
- "solana-security-txt",
- "solarcade-xyz-sdk",
- "spl-associated-token-account",
- "spl-token 8.0.0",
- "spl-token-2022 9.0.0",
- "syn 2.0.101",
- "test-case",
- "thiserror 2.0.12",
- "tokio",
- "turn-based-engine",
-]
-
-[[package]]
 name = "spinning_top"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8284,16 +8294,6 @@ dependencies = [
  "url",
  "utf-8",
  "webpki-roots 0.24.0",
-]
-
-[[package]]
-name = "turn-based-engine"
-version = "0.1.0"
-dependencies = [
- "pinocchio",
- "pinocchio-log",
- "pinocchio-pubkey",
- "pinocchio-system",
 ]
 
 [[package]]

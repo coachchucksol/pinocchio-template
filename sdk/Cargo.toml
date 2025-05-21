@@ -1,5 +1,5 @@
 [package]
-name = "solarcade-xyz-sdk"
+name = "pinocchio-template-sdk"
 version = "0.1.0"
 edition = "2021"
 
@@ -27,4 +27,4 @@ syn = { workspace = true }
 test-case = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
-turn-based-engine = { workspace = true }
+pinocchio-template-example-program = { workspace = true }

@@ -1,5 +1,6 @@
 use std::fmt::{Debug, Formatter};
 
+use pinocchio_template_sdk::example_program::example_program_id;
 use solana_program::{
     clock::Clock, native_token::sol_to_lamports, pubkey::Pubkey, system_instruction::transfer,
 };
@@ -31,8 +32,8 @@ impl TestBuilder {
     pub async fn new() -> Self {
         // $ cargo-build-sbf && SBF_OUT_DIR=$(pwd)/target/sbf-solana-solana/release cargo nextest run
         let mut program_test = ProgramTest::new(
-            "turn_based_engine",
-            turn_based_engine::id().into(),
+            "pinocchio_template_example_program",
+            example_program_id(),
             None,
         );
 

@@ -6,7 +6,7 @@ members = [
 ]
 
 [workspace.package]
-name = "solarcade-xyz"
+name = "pinocchio-template"
 version = "0.1.0"
 edition = "2021"
 
@@ -16,8 +16,8 @@ pinocchio = "0.8.2"
 pinocchio-system = "0.2.3"
 pinocchio-log = "0.4.0"
 pinocchio-pubkey = "0.2.4"
-turn-based-engine = { path = "programs/turn_based_engine", version = "=0.1.0" }
-solarcade-xyz-sdk = { path = "sdk/", version = "=0.1.0" }
+pinocchio-template-example-program = { path = "programs/example_program", version = "=0.1.0" }
+pinocchio-template-sdk = { path = "sdk/", version = "=0.1.0" }
 solana-account-decoder = "2.2"
 solana-cli-config = "2.2"
 solana-metrics = "2.2"

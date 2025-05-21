@@ -12,8 +12,7 @@ pub struct Config {
     bump: u8,
     base: Pubkey,
     admin: Pubkey,
-    server: Pubkey,
-    game_fee_bps: u32,
+    fees_bps: u64,
 }
 
 impl DataLen for Config {
@@ -139,7 +138,6 @@ impl Config {
         account_info: &AccountInfo,
         base: &Pubkey,
         admin: &Pubkey,
-        server: &Pubkey,
         ix_data: &InitializeConfigIxData,
     ) -> Result<(), ProgramError> {
         let mut data = account_info.borrow_mut_data_unchecked();
@@ -154,8 +152,7 @@ impl Config {
         account.bump = ix_data.config_bump;
         account.base = *base;
         account.admin = *admin;
-        account.server = *server;
-        account.game_fee_bps = ix_data.game_fee_bps;
+        account.fees_bps = ix_data.fees_bps;
 
         Ok(())
     }
@@ -172,12 +169,9 @@ impl Config {
             account.admin = new_admin;
         }
 
-        if let Some(new_server) = ix_data.new_server {
-            account.server = new_server;
-        }
 
-        if let Some(new_game_fee_bps) = ix_data.new_game_fee_bps {
-            account.game_fee_bps = new_game_fee_bps;
+        if let Some(new_fees_bps) = ix_data.new_fees_bps {
+            account.fees_bps = new_fees_bps;
         }
 
         Ok(())
@@ -197,12 +191,8 @@ impl Config {
         &self.admin
     }
 
-    pub fn server(&self) -> &Pubkey {
-        &self.server
-    }
-    
-    pub fn game_fee_bps(&self) -> u32 {
-        self.game_fee_bps
+    pub fn fees_bps(&self) -> u64 {
+        self.fees_bps
     }
 
     // ----------------------- SETTERS ---------------------------

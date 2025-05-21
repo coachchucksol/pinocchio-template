@@ -8,17 +8,15 @@ use super::GameEngineInstructions;
 pub struct UpdateConfigIxData {
     pub discriminator: u8,
     pub new_admin: Option<Pubkey>,
-    pub new_server: Option<Pubkey>,
-    pub new_game_fee_bps: Option<u32>,
+    pub new_fees_bps: Option<u64>,
 }
 
 impl UpdateConfigIxData {
     pub fn new(
         new_admin: Option<Pubkey>,
-        new_server: Option<Pubkey>,
-        new_game_fee_bps: Option<u32>,
+        new_fees_bps: Option<u64>,
     ) -> Self {
-        Self { discriminator: GameEngineInstructions::UpdateConfig as u8, new_admin, new_server, new_game_fee_bps }
+        Self { discriminator: GameEngineInstructions::UpdateConfig as u8, new_admin, new_fees_bps }
     }
 
     pub unsafe fn to_bytes(&self) -> &[u8] {

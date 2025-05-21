@@ -1,5 +1,5 @@
 # Build the project
-cd programs/turn_based_engine
+cd programs/example_program
 cargo build-sbf
 cd ../..
 

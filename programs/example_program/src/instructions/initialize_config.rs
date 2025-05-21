@@ -10,15 +10,15 @@ use super::GameEngineInstructions;
 pub struct InitializeConfigIxData {
     pub discriminator: u8,
     pub config_bump: u8,
-    pub game_fee_bps: u32,
+    pub fees_bps: u64,
 }
 
 impl InitializeConfigIxData {
     pub fn new(
         config_bump: u8,
-        game_fee_bps: u32,
+        fees_bps: u64,
     ) -> Self {
-        Self { discriminator: GameEngineInstructions::InitializeConfig as u8, config_bump, game_fee_bps }
+        Self { discriminator: GameEngineInstructions::InitializeConfig as u8, config_bump, fees_bps }
     }
 
     pub unsafe fn to_bytes(&self) -> &[u8] {
@@ -31,7 +31,7 @@ impl DataLen for InitializeConfigIxData {
 }
 
 pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], data: &[u8]) -> ProgramResult {
-    let [config, base, admin, server, sysvar_rent, system_program] = accounts else {
+    let [config, base, admin, sysvar_rent, system_program] = accounts else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };
     let ix_data = unsafe { load_ix_data::<InitializeConfigIxData>(data)? };
@@ -72,7 +72,7 @@ pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], 
     .invoke_signed(&[signer])?;
   
     unsafe {
-        Config::initialize(config, &base.key(), &admin.key(), &server.key(), &ix_data)?;
+        Config::initialize(config, &base.key(), &admin.key(), &ix_data)?;
     }
 
     Ok(())
