@@ -47,7 +47,7 @@ mod tests {
 
         let config_account_raw = fixture.context.banks_client.get_account(config).await.unwrap().unwrap();
         let config_account_data_raw = config_account_raw.data;
-        let config_account = unsafe { pinocchio_template_example_program::utils::load_account::<pinocchio_template_example_program::accounts::config::Config>(&config_account_data_raw).unwrap() };
+        let config_account = pinocchio_template_sdk::example_program::deserialize_config(&config_account_data_raw).unwrap();
 
         assert_eq!(config_account.fees_bps(), fees_bps);
         assert_eq!(config_account.bump(), config_bump);
@@ -82,8 +82,7 @@ mod tests {
 
         let config_account_raw = fixture.context.banks_client.get_account(config).await.unwrap().unwrap();
         let config_account_data_raw = config_account_raw.data;
-        let config_account = unsafe { pinocchio_template_example_program::utils::load_account::<pinocchio_template_example_program::accounts::config::Config>(&config_account_data_raw).unwrap() };
-
+        let config_account = pinocchio_template_sdk::example_program::deserialize_config(&config_account_data_raw).unwrap();
 
         assert_eq!(config_account.fees_bps(), new_fees_bps);
         assert_eq!(config_account.bump(), config_bump);

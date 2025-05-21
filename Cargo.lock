@@ -2914,6 +2914,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "pinocchio-template-cli"
+version = "0.1.0"
+dependencies = [
+ "pinocchio-template-sdk",
+]
+
+[[package]]
 name = "pinocchio-template-example-program"
 version = "0.1.0"
 dependencies = [
@@ -2927,6 +2934,7 @@ dependencies = [
 name = "pinocchio-template-sdk"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "pinocchio",
  "pinocchio-log",
  "pinocchio-pubkey",
@@ -2946,7 +2954,6 @@ dependencies = [
  "spl-token-2022 9.0.0",
  "syn 2.0.101",
  "test-case",
- "thiserror 2.0.12",
  "tokio",
 ]
 
@@ -2954,7 +2961,6 @@ dependencies = [
 name = "pinocchio-template-tests"
 version = "0.1.0"
 dependencies = [
- "pinocchio-template-example-program",
  "pinocchio-template-sdk",
  "solana-account-decoder",
  "solana-cli-config",
@@ -2970,7 +2976,6 @@ dependencies = [
  "spl-token-2022 9.0.0",
  "syn 2.0.101",
  "test-case",
- "thiserror 2.0.12",
  "tokio",
 ]
 

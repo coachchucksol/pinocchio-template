@@ -2,16 +2,19 @@
 members = [
     "programs/*",
     "integration_tests/",
-    "sdk/"
+    "sdk/",
+    "cli/"
 ]
+
+workspace.resolver = "2"
 
 [workspace.package]
 name = "pinocchio-template"
 version = "0.1.0"
 edition = "2021"
 
-
 [workspace.dependencies]
+
 pinocchio = "0.8.2"
 pinocchio-system = "0.2.3"
 pinocchio-log = "0.4.0"
@@ -32,5 +35,5 @@ spl-token = { version = "8.0", features = ["no-entrypoint"] }
 spl-token-2022 = { version = "9.0", features = ["no-entrypoint"] }
 syn = "2.0.72"
 test-case = "3.3.1"
-thiserror = "2.0"
 tokio = { version = "1.36.0", features = ["full"] }
+anyhow = "1.0.98"

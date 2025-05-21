@@ -25,6 +25,6 @@ spl-token = { workspace = true }
 spl-token-2022 = { workspace = true }
 syn = { workspace = true }
 test-case = { workspace = true }
-thiserror = { workspace = true }
 tokio = { workspace = true }
 pinocchio-template-example-program = { workspace = true }
+anyhow = { workspace = true }
