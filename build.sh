@@ -1,10 +1,6 @@
 # Build the project
-cd program 
+cd programs/turn_based_engine
 cargo build-sbf
-cd ..
+cd ../..
 
-# Build the CLI
-cd cli
-cargo build
-cd ..
-
+SBF_OUT_DIR=$(pwd)/target/deploy cargo nextest run

@@ -1,0 +1,23 @@
+[package]
+name = "solarcade-xyz-tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+solana-account-decoder = { workspace = true }
+solana-cli-config = { workspace = true }
+solana-metrics = { workspace = true }
+solana-program = { workspace = true }
+solana-program-test = { workspace = true }
+solana-sdk = { workspace = true }
+solana-rpc-client = { workspace = true }
+solana-rpc-client-api = { workspace = true }
+solana-security-txt = { workspace = true }
+spl-associated-token-account = { workspace = true }
+spl-token = { workspace = true }
+spl-token-2022 = { workspace = true }
+syn = { workspace = true }
+test-case = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+turn-based-engine = { workspace = true }

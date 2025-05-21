@@ -1,5 +1,5 @@
 
-use pinocchio::{account_info::AccountInfo, program_error::ProgramError, pubkey::{self, Pubkey}};
+use pinocchio::{account_info::AccountInfo, instruction::{Seed, Signer}, program_error::ProgramError, pubkey::{self, Pubkey}};
 use pinocchio_log::log;
 
 use crate::{utils::{load_account, load_account_mut_unchecked, DataLen, Initialized}, accounts::GameEngineDiscriminator};
@@ -9,6 +9,7 @@ use crate::{utils::{load_account, load_account_mut_unchecked, DataLen, Initializ
 #[repr(C)]
 pub struct Config {
     discriminator: u8,
+    bump: u8,
     base: Pubkey,
     admin: Pubkey,
     server: Pubkey,
@@ -21,26 +22,24 @@ impl DataLen for Config {
 
 impl Initialized for Config {
     fn is_initialized(&self) -> bool {
-        self.discriminator != GameEngineDiscriminator::Config as u8
+        self.discriminator == GameEngineDiscriminator::Config as u8
     }
 }
 
 impl Config {
     // ----------------------- ACCOUNT CHECKS ---------------------------
-
     pub const SEED: &[u8] = b"CONFIG";
 
-    pub fn seeds(base: &Pubkey) -> Vec<Vec<u8>> {
-        vec![Self::SEED.to_vec(), base.to_vec()]
-    }
 
-    pub fn find_program_address(program_id: &Pubkey, base: &Pubkey) -> (Pubkey, u8, Vec<Vec<u8>>) {
-        let mut seeds = Self::seeds(base);
-        let seeds_iter: Vec<_> = seeds.iter().map(|s| s.as_slice()).collect();
-        let (pda, bump) = pubkey::find_program_address(&seeds_iter, program_id);
-        seeds.push(vec![bump]);
+    pub fn create_program_address<'a>(
+        program_id: &Pubkey,
+        base: &Pubkey,
+        bump: u8,
+    ) -> Result<Pubkey, ProgramError> {
+        let seed_with_bump = [Self::SEED, base.as_ref(), &[bump]];
+        let pda = pubkey::create_program_address(&seed_with_bump, program_id)?;
 
-        (pda, bump, seeds)
+        Ok(pda)
     }
 
     pub fn load(
@@ -70,7 +69,7 @@ impl Config {
             result?
         };
 
-        let (account_key, _, _) = Self::find_program_address(program_id, &account.base);
+        let account_key = Self::create_program_address(program_id, &account.base, account.bump)?;
         if account_info.key().ne(&account_key) {
             log!("Config account has an invalid key");
             return Err(ProgramError::InvalidAccountData);
@@ -81,6 +80,7 @@ impl Config {
     // ----------------------- INITIALIZE ------------------------  
     pub unsafe fn initialize(
         account_info: &AccountInfo,
+        bump: u8,
         base: &Pubkey,
         admin: &Pubkey,
         server: &Pubkey,
@@ -95,6 +95,7 @@ impl Config {
         }
 
         account.discriminator = GameEngineDiscriminator::Config as u8;
+        account.bump = bump;
         account.base = *base;
         account.admin = *admin;
         account.server = *server;
@@ -105,6 +106,10 @@ impl Config {
 
     // ----------------------- GETTERS ---------------------------
     
+    pub fn bump(&self) -> u8 {
+        self.bump
+    }
+
     pub fn base(&self) -> &Pubkey {
         &self.base
     }
