@@ -1,0 +1,10 @@
+/Users/christiankrueger/Documents/Playground/solarcade/target/debug/deps/num_bigint-bac0b825de7fee1d.d: /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/lib.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/macros.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/bigint.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/biguint.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/algorithms.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/monty.rs
+
+/Users/christiankrueger/Documents/Playground/solarcade/target/debug/deps/libnum_bigint-bac0b825de7fee1d.rmeta: /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/lib.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/macros.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/bigint.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/biguint.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/algorithms.rs /Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/monty.rs
+
+/Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/lib.rs:
+/Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/macros.rs:
+/Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/bigint.rs:
+/Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/biguint.rs:
+/Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/algorithms.rs:
+/Users/christiankrueger/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num-bigint-0.2.6/src/monty.rs:
