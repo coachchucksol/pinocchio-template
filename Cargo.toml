@@ -1,7 +1,8 @@
 [workspace]
 members = [
     "programs/*",
-    "integration_tests/"
+    "integration_tests/",
+    "sdk/"
 ]
 
 [workspace.package]
@@ -16,6 +17,7 @@ pinocchio-system = "0.2.3"
 pinocchio-log = "0.4.0"
 pinocchio-pubkey = "0.2.4"
 turn-based-engine = { path = "programs/turn_based_engine", version = "=0.1.0" }
+solarcade-xyz-sdk = { path = "sdk/", version = "=0.1.0" }
 solana-account-decoder = "2.2"
 solana-cli-config = "2.2"
 solana-metrics = "2.2"

@@ -1,9 +1,16 @@
 [package]
-name = "solarcade-xyz-tests"
+name = "solarcade-xyz-sdk"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["cdylib", "lib"]
+
 [dependencies]
+pinocchio = { workspace = true }
+pinocchio-system = { workspace = true }
+pinocchio-log = { workspace = true }
+pinocchio-pubkey = { workspace = true }
 solana-account-decoder = { workspace = true }
 solana-cli-config = { workspace = true }
 solana-metrics = { workspace = true }
@@ -21,4 +28,3 @@ test-case = { workspace = true }
 thiserror = { workspace = true }
 tokio = { workspace = true }
 turn-based-engine = { workspace = true }
-solarcade-xyz-sdk = { workspace = true }

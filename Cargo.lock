@@ -6945,6 +6945,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "solarcade-xyz-sdk"
+version = "0.1.0"
+dependencies = [
+ "pinocchio",
+ "pinocchio-log",
+ "pinocchio-pubkey",
+ "pinocchio-system",
+ "solana-account-decoder",
+ "solana-cli-config",
+ "solana-metrics",
+ "solana-program",
+ "solana-program-test",
+ "solana-rpc-client",
+ "solana-rpc-client-api",
+ "solana-sdk",
+ "solana-security-txt",
+ "spl-associated-token-account",
+ "spl-token 8.0.0",
+ "spl-token-2022 9.0.0",
+ "syn 2.0.101",
+ "test-case",
+ "thiserror 2.0.12",
+ "tokio",
+ "turn-based-engine",
+]
+
+[[package]]
 name = "solarcade-xyz-tests"
 version = "0.1.0"
 dependencies = [
@@ -6957,6 +6984,7 @@ dependencies = [
  "solana-rpc-client-api",
  "solana-sdk",
  "solana-security-txt",
+ "solarcade-xyz-sdk",
  "spl-associated-token-account",
  "spl-token 8.0.0",
  "spl-token-2022 9.0.0",
