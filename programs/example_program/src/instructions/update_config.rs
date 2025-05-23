@@ -1,7 +1,12 @@
-use pinocchio::{account_info::AccountInfo,  program_error::ProgramError, pubkey::Pubkey, ProgramResult};
-use crate::{accounts::config::Config,   utils::{load_ix_data, load_signer, DataLen}};
+use crate::{
+    accounts::config::Config,
+    utils::{load_ix_data, load_signer, DataLen},
+};
+use pinocchio::{
+    account_info::AccountInfo, program_error::ProgramError, pubkey::Pubkey, ProgramResult,
+};
 
-use super::GameEngineInstructions;
+use super::ExampleProgramInstructions;
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -12,11 +17,12 @@ pub struct UpdateConfigIxData {
 }
 
 impl UpdateConfigIxData {
-    pub fn new(
-        new_admin: Option<Pubkey>,
-        new_fees_bps: Option<u64>,
-    ) -> Self {
-        Self { discriminator: GameEngineInstructions::UpdateConfig as u8, new_admin, new_fees_bps }
+    pub fn new(new_admin: Option<Pubkey>, new_fees_bps: Option<u64>) -> Self {
+        Self {
+            discriminator: ExampleProgramInstructions::UpdateConfig as u8,
+            new_admin,
+            new_fees_bps,
+        }
     }
 
     pub unsafe fn to_bytes(&self) -> &[u8] {
@@ -25,10 +31,14 @@ impl UpdateConfigIxData {
 }
 
 impl DataLen for UpdateConfigIxData {
-    const LEN: usize = core::mem::size_of::<UpdateConfigIxData>(); 
+    const LEN: usize = core::mem::size_of::<UpdateConfigIxData>();
 }
 
-pub fn process_update_config(program_id: &Pubkey, accounts: &[AccountInfo], data: &[u8]) -> ProgramResult {
+pub fn process_update_config(
+    program_id: &Pubkey,
+    accounts: &[AccountInfo],
+    data: &[u8],
+) -> ProgramResult {
     let [config, admin] = accounts else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };
@@ -37,7 +47,9 @@ pub fn process_update_config(program_id: &Pubkey, accounts: &[AccountInfo], data
     // ----------------------- CHECKS -----------------------
     load_signer(admin, true)?;
     Config::load(program_id, &config, true, Some(admin))?;
-    unsafe { Config::check_admin(config, admin)?; }
+    unsafe {
+        Config::check_admin(config, admin)?;
+    }
 
     // ----------------------- WORK -----------------------
     unsafe {

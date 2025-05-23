@@ -1,9 +1,20 @@
-use pinocchio::{account_info::AccountInfo, instruction::{Seed, Signer}, program_error::ProgramError, pubkey::Pubkey, sysvars::rent::Rent, ProgramResult};
-use pinocchio_system::instructions::CreateAccount;
-use crate::{accounts::config::Config, config_seed_with_bump,  utils::{load_ix_data, load_signer, load_system_account, load_system_program, DataLen}};
+use crate::{
+    accounts::config::Config,
+    config_seed_with_bump,
+    utils::{load_ix_data, load_signer, load_system_account, load_system_program, DataLen},
+};
+use pinocchio::{
+    account_info::AccountInfo,
+    instruction::{Seed, Signer},
+    program_error::ProgramError,
+    pubkey::Pubkey,
+    sysvars::rent::Rent,
+    ProgramResult,
+};
 use pinocchio_log::log;
+use pinocchio_system::instructions::CreateAccount;
 
-use super::GameEngineInstructions;
+use super::ExampleProgramInstructions;
 
 #[repr(C)]
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -14,11 +25,12 @@ pub struct InitializeConfigIxData {
 }
 
 impl InitializeConfigIxData {
-    pub fn new(
-        config_bump: u8,
-        fees_bps: u64,
-    ) -> Self {
-        Self { discriminator: GameEngineInstructions::InitializeConfig as u8, config_bump, fees_bps }
+    pub fn new(config_bump: u8, fees_bps: u64) -> Self {
+        Self {
+            discriminator: ExampleProgramInstructions::InitializeConfig as u8,
+            config_bump,
+            fees_bps,
+        }
     }
 
     pub unsafe fn to_bytes(&self) -> &[u8] {
@@ -27,10 +39,14 @@ impl InitializeConfigIxData {
 }
 
 impl DataLen for InitializeConfigIxData {
-    const LEN: usize = core::mem::size_of::<InitializeConfigIxData>(); 
+    const LEN: usize = core::mem::size_of::<InitializeConfigIxData>();
 }
 
-pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], data: &[u8]) -> ProgramResult {
+pub fn process_initilaize_config(
+    program_id: &Pubkey,
+    accounts: &[AccountInfo],
+    data: &[u8],
+) -> ProgramResult {
     let [config, base, admin, sysvar_rent, system_program] = accounts else {
         return Err(ProgramError::NotEnoughAccountKeys);
     };
@@ -55,9 +71,9 @@ pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], 
     let bump_bytes = [ix_data.config_bump];
     let seed_with_bump = config_seed_with_bump!(base.key(), &bump_bytes);
     let signing_seeds = [
-        Seed::from(seed_with_bump[0]), 
-        Seed::from(seed_with_bump[1]), 
-        Seed::from(seed_with_bump[2])
+        Seed::from(seed_with_bump[0]),
+        Seed::from(seed_with_bump[1]),
+        Seed::from(seed_with_bump[2]),
     ];
     Config::check_seeds(base.key(), ix_data.config_bump, &signing_seeds)?;
     let signer = Signer::from(&signing_seeds);
@@ -70,7 +86,7 @@ pub fn process_initilaize_config(program_id: &Pubkey, accounts: &[AccountInfo], 
         lamports: rent.minimum_balance(Config::LEN),
     }
     .invoke_signed(&[signer])?;
-  
+
     unsafe {
         Config::initialize(config, &base.key(), &admin.key(), &ix_data)?;
     }

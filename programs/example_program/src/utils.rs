@@ -1,7 +1,7 @@
 use pinocchio::{account_info::AccountInfo, program_error::ProgramError};
 use pinocchio_log::log;
 
-use crate::errors::GameEngineError;
+use crate::errors::ExampleProgramError;
 
 pub trait DataLen {
     const LEN: usize;
@@ -44,7 +44,9 @@ pub unsafe fn load_account_mut<T: DataLen + Initialized>(
 }
 
 #[inline(always)]
-pub unsafe fn load_account_mut_unchecked<T: DataLen>(bytes: &mut [u8]) -> Result<&mut T, ProgramError> {
+pub unsafe fn load_account_mut_unchecked<T: DataLen>(
+    bytes: &mut [u8],
+) -> Result<&mut T, ProgramError> {
     if bytes.len() != T::LEN {
         return Err(ProgramError::InvalidAccountData);
     }
@@ -54,7 +56,7 @@ pub unsafe fn load_account_mut_unchecked<T: DataLen>(bytes: &mut [u8]) -> Result
 #[inline(always)]
 pub unsafe fn load_ix_data<T: DataLen>(bytes: &[u8]) -> Result<&T, ProgramError> {
     if bytes.len() != T::LEN {
-        return Err(GameEngineError::InvalidInstructionData.into());
+        return Err(ExampleProgramError::InvalidInstructionData.into());
     }
     Ok(&*(bytes.as_ptr() as *const T))
 }
