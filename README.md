@@ -19,7 +19,9 @@ cd pinocchio-template
 
 ## Design Decisions
 
-Inspired by: https://github.com/Nagaprasadvr/solana-pinocchio-starter
+Inspired by ( https://github.com/Nagaprasadvr/solana-pinocchio-starter )
+Found from ( https://solana.stackexchange.com/questions/21489/are-there-any-examples-of-the-pinocchio-framework-that-i-can-study )
+
 
 - **No Direct Dependencies**: No crate should use `pinocchio-template-example-program` directly - the SDK forwards all important exports
 - **Zero-Copy Performance**: Uses Pinocchio for minimal runtime overhead
